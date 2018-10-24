@@ -38,3 +38,24 @@ $('#message-form').on('submit', function(e){
     console.log(data);
   });
 });
+
+//klik na Send Location button
+var locationButton = $('#send-location');
+locationButton.on('click', function(e){
+  //ako j stari browser pa nema geolociranje
+  if(!navigator.geolocation){
+    return alert('Geolocation not supported by your browser');
+  }
+  //ako u browseru radi geolocation
+  navigator.geolocation.getCurrentPosition(function(position){
+    // console.log(position);
+    //emitujemo event createLocationMessage, koji salje koordinate usera
+    socket.emit('createLocationMessage', {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    });
+  }, function(){//ako user neda dozvolu browseru da deli njegovu poziciju
+    alert('Unable to fetch location.');
+  });
+});
+

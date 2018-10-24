@@ -31,6 +31,11 @@ io.on('connection', (socket) => {
     callback('This is from the server');
   });
 
+  //kad user klikne u browseru btn Send Location index.js salje event createLocationMessage u kom su koordinate usera
+  socket.on('createLocationMessage', function(coords){
+    io.emit('newMessage', generateMessage('Admir', `${coords.latitude}, ${coords.longitude}`));
+  });
+
   //event za disconnect event, kad se klijent otkaci
   socket.on('disconnect', () => {
   	console.log('User is disconnected');
