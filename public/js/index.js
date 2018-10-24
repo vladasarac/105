@@ -9,10 +9,10 @@ socket.on('connect', function(){
   // 	text: 'BLA BLA BLA BLA'
   // });
   //mitovanje eventa createMessage koji ima listener u server.js
-  socket.emit('createMessage', {
-  	from: 'Vlada',
-  	text: 'bla bla ovo je message...'
-  });
+  // socket.emit('createMessage', {
+  // 	from: 'Vlada',
+  // 	text: 'bla bla ovo je message...'
+  // });
 });	
 
 //kad se klijent otkaci od servera

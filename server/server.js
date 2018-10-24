@@ -23,20 +23,26 @@ io.on('connection', (socket) => {
   // });
 
   //emitovanje eventa newMessage(sa objektom u kom su podatci) koji ima listenera u /public/js/index.js fajlu 
-  socket.emit('newMessage', {
-  	from: 'Sima',
-  	text: 'bla bla truc truc novi message!',
-  	createAt: 123
-  });
+  // socket.emit('newMessage', {
+  // 	from: 'Sima',
+  // 	text: 'bla bla truc truc novi message!',
+  // 	createdAt: 123
+  // });
 
   //listener za event createEmail koji emituje klijent tj /public/js/index.js fajl
-  socket.on('createEmail', function(newEmail){
-    console.log('createEmail', newEmail);
-  });
+  // socket.on('createEmail', function(newEmail){
+  //   console.log('createEmail', newEmail);
+  // });
 
   //listener za event createMessage koji emituje klijent tj /public/js/index.js fajl
   socket.on('createMessage', function(message){
     console.log('createMessage', message);
+    //emitujemo newMessage svim klijentima okacenim na server
+  	io.emit('newMessage', {
+  	  from: message.from,
+  	  text: message.text,
+  	  createAt: new Date().getTime()	
+  	});
   });
 
   //event za disconnect event, kad se klijent otkaci
