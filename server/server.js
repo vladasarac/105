@@ -15,6 +15,31 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
   console.log('New user connected');
 
+  //emitovanje eventa newEmail(sa objektom u kom su podatci) koji ima listenera u /public/js/index.js fajlu 
+  // socket.emit('newEmail', {
+  // 	from: 'vladasarac@hotmail.com',
+  // 	text: 'bla bla truc truc!',
+  // 	createAt: 123
+  // });
+
+  //emitovanje eventa newMessage(sa objektom u kom su podatci) koji ima listenera u /public/js/index.js fajlu 
+  socket.emit('newMessage', {
+  	from: 'Sima',
+  	text: 'bla bla truc truc novi message!',
+  	createAt: 123
+  });
+
+  //listener za event createEmail koji emituje klijent tj /public/js/index.js fajl
+  socket.on('createEmail', function(newEmail){
+    console.log('createEmail', newEmail);
+  });
+
+  //listener za event createMessage koji emituje klijent tj /public/js/index.js fajl
+  socket.on('createMessage', function(message){
+    console.log('createMessage', message);
+  });
+
+  //event za disconnect event, kad se klijent otkaci
   socket.on('disconnect', () => {
   	console.log('User is disconnected');
   });	
