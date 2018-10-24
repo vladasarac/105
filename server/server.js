@@ -4,6 +4,8 @@ const publicPath = path.join(__dirname, '../public');//ovo je samo da i napravil
 // console.log(publicPath);
 const express = require('express');
 const socketIO = require('socket.io');
+const {generateMessage} = require('./utils/message');
+
 const port = process.env.PORT || 3000;
 
 
@@ -15,29 +17,17 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
   console.log('New user connected');
   
-  //emitujemo klijentu newMessage kad se konektuje
-  socket.emit('newMessage', {
-    from: 'Admir',
-    text: 'Welcome to the chat app',
-    createdAt: new Date().getTime() 
-  });
+  //emitujemo klijentu newMessage kad se konektuje, generateMessage() je funkcija iz /utils/message.js koja pravi message koji emitujemo
+  socket.emit('newMessage', generateMessage('Admir', 'Welcome to chat App'));
 
-  //ovo se emituje svim klijentima osim onom koji se upravo konektovao
-  socket.broadcast.emit('newMessage', {
-    from: 'Admir',
-    text: 'New user joined',
-    createdAt: new Date().getTime() 
-  });
+  //ovo se emituje svim klijentima osim onom koji se upravo konektovao, generateMessage() je funkcija iz /utils/message.js koja pravi message koji emitujemo
+  socket.broadcast.emit('newMessage', generateMessage('Admir', 'New User Joined'));
 
   //listener za event createMessage koji emituje klijent tj /public/js/index.js fajl
   socket.on('createMessage', function(message){
     console.log('createMessage', message);
-    //emitujemo newMessage svim klijentima okacenim na server
-  	io.emit('newMessage', {
-  	  from: message.from,
-  	  text: message.text,
-  	  createdAt: new Date().getTime()	
-  	});
+    //emitujemo newMessage svim klijentima okacenim na server, generateMessage() je funkcija iz /utils/message.js koja pravi message koji emitujemo
+  	io.emit('newMessage', generateMessage(message.from, message.text));
   });
 
   //event za disconnect event, kad se klijent otkaci
