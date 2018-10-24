@@ -14,29 +14,40 @@ app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
   console.log('New user connected');
-  
-  //emitujemo klijentu newMessage kad se konektuje
-  socket.emit('newMessage', {
-    from: 'Admir',
-    text: 'Welcome to the chat app',
-    createdAt: new Date().getTime() 
-  });
 
-  //ovo se emituje svim klijentima osim onom koji se upravo konektovao
-  socket.broadcast.emit('newMessage', {
-    from: 'Admir',
-    text: 'New user joined',
-    createdAt: new Date().getTime() 
-  });
+  //emitovanje eventa newEmail(sa objektom u kom su podatci) koji ima listenera u /public/js/index.js fajlu 
+  // socket.emit('newEmail', {
+  // 	from: 'vladasarac@hotmail.com',
+  // 	text: 'bla bla truc truc!',
+  // 	createAt: 123
+  // });
+
+  //emitovanje eventa newMessage(sa objektom u kom su podatci) koji ima listenera u /public/js/index.js fajlu 
+  // socket.emit('newMessage', {
+  // 	from: 'Sima',
+  // 	text: 'bla bla truc truc novi message!',
+  // 	createdAt: 123
+  // });
+
+  //listener za event createEmail koji emituje klijent tj /public/js/index.js fajl
+  // socket.on('createEmail', function(newEmail){
+  //   console.log('createEmail', newEmail);
+  // });
 
   //listener za event createMessage koji emituje klijent tj /public/js/index.js fajl
   socket.on('createMessage', function(message){
     console.log('createMessage', message);
     //emitujemo newMessage svim klijentima okacenim na server
-  	io.emit('newMessage', {
+  	// io.emit('newMessage', {
+  	//   from: message.from,
+  	//   text: message.text,
+  	//   createAt: new Date().getTime()	
+  	// });
+  	//emituje se svima osim onom ko je eitovao
+  	socket.broadcast.emit('newMessage', {
   	  from: message.from,
   	  text: message.text,
-  	  createdAt: new Date().getTime()	
+  	  createAt: new Date().getTime()	  	
   	});
   });
 
