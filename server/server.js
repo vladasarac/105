@@ -23,11 +23,12 @@ io.on('connection', (socket) => {
   //ovo se emituje svim klijentima osim onom koji se upravo konektovao, generateMessage() je funkcija iz /utils/message.js koja pravi message koji emitujemo
   socket.broadcast.emit('newMessage', generateMessage('Admir', 'New User Joined'));
 
-  //listener za event createMessage koji emituje klijent tj /public/js/index.js fajl
-  socket.on('createMessage', function(message){
+  //listener za event createMessage koji emituje klijent tj /public/js/index.js fajl, argument callback je funkcija definisana pri emitovanju eventa
+  socket.on('createMessage', function(message, callback){
     console.log('createMessage', message);
     //emitujemo newMessage svim klijentima okacenim na server, generateMessage() je funkcija iz /utils/message.js koja pravi message koji emitujemo
   	io.emit('newMessage', generateMessage(message.from, message.text));
+    callback('This is from the server');
   });
 
   //event za disconnect event, kad se klijent otkaci
