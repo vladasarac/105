@@ -12,18 +12,22 @@ socket.on('disconnect', function(){
 
 //listener za event newMessage koji se emituje iz server.js 
 socket.on('newMessage', function(message){
-  console.log('NewMessage', message);	
+  // console.log('NewMessage', message);	
+  //koristimo moment library da bi formatirali vreme tj createdAt property message objekta
+  var formattedTime = moment(message.createdAt).format('h:mm a');
   //ubacujemo prisitgli message u <ol id="messages">
   var li = $('<li></li>');
-  li.text(`${message.from}: ${message.text}`);
+  li.text(`${message.from} ${formattedTime}: ${message.text}`);
   $('#messages').append(li);
 });
 
 //listener za event newLocationMessage koji emituje server.js i salje adresu za google maps, to se desava kad user klikne btn SendLocation
 socket.on('newLocationMessage', function(message){
+  //koristimo moment library da bi formatirali vreme tj createdAt property message objekta
+  var formattedTime = moment(message.createdAt).format('h:mm a');
   var li = $('<li></li>');
   var a = $('<a target="_blank">My current location</a>');
-  li.text(`${message.from}: `);
+  li.text(`${message.from}  ${formattedTime}: `);
   a.attr('href', message.url);
   li.append(a);
   $('#messages').append(li);
