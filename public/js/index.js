@@ -19,6 +19,16 @@ socket.on('newMessage', function(message){
   $('#messages').append(li);
 });
 
+//listener za event newLocationMessage koji emituje server.js i salje adresu za google maps, to se desava kad user klikne btn SendLocation
+socket.on('newLocationMessage', function(message){
+  var li = $('<li></li>');
+  var a = $('<a target="_blank">My current location</a>');
+  li.text(`${message.from}: `);
+  a.attr('href', message.url);
+  li.append(a);
+  $('#messages').append(li);
+});
+
 //emitjemo createMessage event i saljemo callback koji se poziva u listeneru
 // socket.emit('createMessage', {
 //   from: 'Pera',

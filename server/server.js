@@ -4,7 +4,7 @@ const publicPath = path.join(__dirname, '../public');//ovo je samo da i napravil
 // console.log(publicPath);
 const express = require('express');
 const socketIO = require('socket.io');
-const {generateMessage} = require('./utils/message');
+const {generateMessage, generateLocationMessage} = require('./utils/message');
 
 const port = process.env.PORT || 3000;
 
@@ -33,7 +33,8 @@ io.on('connection', (socket) => {
 
   //kad user klikne u browseru btn Send Location index.js salje event createLocationMessage u kom su koordinate usera
   socket.on('createLocationMessage', function(coords){
-    io.emit('newMessage', generateMessage('Admir', `${coords.latitude}, ${coords.longitude}`));
+    // io.emit('newMessage', generateMessage('Admir', `${coords.latitude}, ${coords.longitude}`));
+    io.emit('newLocationMessage', generateLocationMessage('Admir', coords.latitude, coords.longitude));
   });
 
   //event za disconnect event, kad se klijent otkaci
