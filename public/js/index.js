@@ -40,12 +40,14 @@ socket.on('newLocationMessage', function(message){
 //kad se sabmituje forma u index.html
 $('#message-form').on('submit', function(e){
   e.preventDefault();
+  var messageTextbox = $('[name=message]');
   //emitujemo createMessage event i kao text saljemo userov unos u formu iz index.html 
   socket.emit('createMessage', {
     from: 'User',
-    text: $('[name=message]').val()
+    text: $(messageTextbox).val()
   }, function(data){
-    console.log(data);
+    // console.log(data);
+    $(messageTextbox).val('');
   });
 });
 
@@ -56,8 +58,10 @@ locationButton.on('click', function(e){
   if(!navigator.geolocation){
     return alert('Geolocation not supported by your browser');
   }
+  locationButton.attr('disabled', 'disabled').text('Sending location...');
   //ako u browseru radi geolocation
   navigator.geolocation.getCurrentPosition(function(position){
+    locationButton.removeAttr('disabled').text('Send location');
     // console.log(position);
     //emitujemo event createLocationMessage, koji salje koordinate usera
     socket.emit('createLocationMessage', {
@@ -65,6 +69,7 @@ locationButton.on('click', function(e){
       longitude: position.coords.longitude
     });
   }, function(){//ako user neda dozvolu browseru da deli njegovu poziciju
+    locationButton.removeAttr('disabled').text('Send location');
     alert('Unable to fetch location.');
   });
 });

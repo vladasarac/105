@@ -28,7 +28,7 @@ io.on('connection', (socket) => {
     console.log('createMessage', message);
     //emitujemo newMessage svim klijentima okacenim na server, generateMessage() je funkcija iz /utils/message.js koja pravi message koji emitujemo
   	io.emit('newMessage', generateMessage(message.from, message.text));
-    callback('This is from the server');
+    callback();
   });
 
   //kad user klikne u browseru btn Send Location index.js salje event createLocationMessage u kom su koordinate usera
