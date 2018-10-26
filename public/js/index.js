@@ -1,5 +1,20 @@
 var socket = io();
 
+//funkcija koja proverava na kom delu ekrana je user i ako je pri dnu a stigne nova poruka scroluje se na dno ekrana da bi bila vidljiva
+function scrollToBottom(){
+  var messages = $('#messages');
+  var newMessage = messages.children('li:last-child');
+  var clientHeight = messages.prop('clientHeight');
+  var scrollTop = messages.prop('scrollTop');
+  var scrollHeight = messages.prop('scrollHeight');
+  var newMessageHeight = newMessage.innerHeight();
+  var lastMessageHeight = newMessage.prev().innerHeight(); 
+  if(clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight){
+    // console.log('Should scroll');
+    messages.scrollTop(scrollHeight);
+  }
+}
+
 //kad se klijent okaci na server tj na event connect
 socket.on('connect', function(){
   console.log('Connected to server');
@@ -25,6 +40,7 @@ socket.on('newMessage', function(message){
   var template = $('#message-template').html();
   var html = Mustache.render(template, {text: message.text, from: message.from, createdAt: formattedTime});
   $('#messages').append(html);
+  scrollToBottom();//pozivamo funkciju za crolovanje ekrana da bi nova poruka bila vidljiva
 });
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------
@@ -43,6 +59,7 @@ socket.on('newLocationMessage', function(message){
   var  template = $('#location-message-template').html();
   var html = Mustache.render(template, {url: message.url, from: message.from, createdAt: formattedTime});
   $('#messages').append(html);
+  scrollToBottom();//pozivamo funkciju za crolovanje ekrana da bi nova poruka bila vidljiva
 });
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------
